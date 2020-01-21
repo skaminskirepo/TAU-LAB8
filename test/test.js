@@ -29,7 +29,19 @@ describe("Testing correctness of form fields validation: ", function () {
 		document.body.removeChild(document.getElementById('test_header'));
 	});
 	
-	it("TEST", function () {
+	it("Should mark field as invalid when field does not support regex", function () {
+		//Given
+		document.getElementById('firstname').value = "verySmolLetters";
+
+		//When 
+		$('.random_class').validate(/^[A-Z]/);
+		$('#firstname').click();
+
+		//Then
+		expect(document.getElementById('firstname').classList).toContain("invalid");
+		expect(document.getElementById('firstname').style.backgroundColor).toBe("red");
 		
+		expect(document.getElementById('surname').classList).not.toContain("invalid");
+		expect(document.getElementById('surname').style.backgroundColor).not.toBe("red");
 	});
 });
