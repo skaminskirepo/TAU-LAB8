@@ -1,11 +1,11 @@
 (function( $ ) {
 	$.fn.validate = function(regex) {
 		return this.each(function() {
-			$(this).click(function() {
+			$(this).on('input', function() {
 				console.log("Checking if \'" + $(this).val() + "\' matches " + regex);
 				$(this).swapClasses(regex.test($(this).val()));
+				$(this).tagField();
 			});
-			$(this).tagField();
 		});
 	}
 }( jQuery ));
@@ -29,17 +29,13 @@
 (function( $ ) {
 	$.fn.tagField = function() {
 		return this.each(function() {
-			$(this).click(function() {
-				$(this)[0].className.split(' ').map(x => {
-					if(x.localeCompare('invalid')){
-						$(this).css("background-color", "green");
-					} else if(x.localeCompare('valid')) {
-						$(this).css("background-color", "red");
-					} else {
-						//DO NOTHING
-					}
-				})
-			});
+			$(this)[0].className.split(' ').map(x => {
+				if(x.localeCompare("invalid") == 0){
+					$(this).css("background-color", "red");
+				} else if(x.localeCompare("valid") == 0){
+					$(this).css("background-color", "");
+				}
+			})
 		});
 	}
 }( jQuery ));

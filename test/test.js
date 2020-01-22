@@ -1,3 +1,8 @@
+var inputEvent = new Event('input', {
+    bubbles: true,
+    cancelable: true,
+});
+
 var header =
 	'<h1 id="test_header">User data</h1>';
 
@@ -29,13 +34,15 @@ describe("Testing correctness of form fields validation: ", function () {
 		document.body.removeChild(document.getElementById('test_header'));
 	});
 	
-	it("Should mark field as invalid when field does not support regex", function () {
+	it("Should mark field as invalid input change does not follow regex", function () {
 		//Given
-		document.getElementById('firstname').value = "verySmolLetters";
+		document.getElementById('firstname').value = "BIG";
+		document.getElementById('surname').value = "BIG";
 
 		//When 
 		$('.random_class').validate(/^[A-Z]/);
-		$('#firstname').click();
+		document.getElementById('firstname').value = "big";
+		document.getElementById('firstname').dispatchEvent(inputEvent);
 
 		//Then
 		expect(document.getElementById('firstname').classList).toContain("invalid");
