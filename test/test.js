@@ -51,4 +51,68 @@ describe("Testing correctness of form fields validation: ", function () {
 		expect(document.getElementById('surname').classList).not.toContain("invalid");
 		expect(document.getElementById('surname').style.backgroundColor).not.toBe("red");
 	});
+	
+	it("Should mark both fields as invalid input changes do not follow regex", function () {
+		//Given
+		document.getElementById('firstname').value = "BIG";
+		document.getElementById('surname').value = "BIG";
+
+		//When 
+		$('.random_class').validate(/^[A-Z]/);
+		document.getElementById('firstname').value = "big";
+		document.getElementById('surname').value = "big";
+		document.getElementById('firstname').dispatchEvent(inputEvent);
+		document.getElementById('surname').dispatchEvent(inputEvent);
+
+		//Then
+		expect(document.getElementById('firstname').classList).toContain("invalid");
+		expect(document.getElementById('firstname').style.backgroundColor).toBe("red");
+		
+		expect(document.getElementById('surname').classList).toContain("invalid");
+		expect(document.getElementById('surname').style.backgroundColor).toBe("red");
+	});
+	
+	it("Should mark field as invalid input, and remove it after input is corrected", function () {
+		//Given
+		document.getElementById('firstname').value = "BIG";
+		document.getElementById('surname').value = "BIG";
+
+		//When 
+		$('.random_class').validate(/^[A-Z]/);
+		document.getElementById('firstname').value = "big";
+		document.getElementById('firstname').dispatchEvent(inputEvent);
+
+		//Then
+		expect(document.getElementById('firstname').classList).toContain("invalid");
+		expect(document.getElementById('firstname').style.backgroundColor).toBe("red");
+		
+		expect(document.getElementById('surname').classList).not.toContain("invalid");
+		expect(document.getElementById('surname').style.backgroundColor).not.toBe("red");
+		
+		//When
+		document.getElementById('firstname').value = "BIG";
+		document.getElementById('firstname').dispatchEvent(inputEvent);
+		
+		//Then
+		expect(document.getElementById('firstname').classList).not.toContain("invalid");
+		expect(document.getElementById('firstname').style.backgroundColor).not.toBe("red")
+	});
+	
+	it("Should not mark fields as invalid when input regex is correct", function () {
+		//Given
+		document.getElementById('firstname').value = "BIG";
+		document.getElementById('surname').value = "BIG";
+
+		//When 
+		$('.random_class').validate(/^[A-Z]/);
+		document.getElementById('firstname').dispatchEvent(inputEvent);
+		document.getElementById('surname').dispatchEvent(inputEvent);
+
+		//Then
+		expect(document.getElementById('firstname').classList).not.toContain("invalid");
+		expect(document.getElementById('firstname').style.backgroundColor).not.toBe("red");
+		
+		expect(document.getElementById('surname').classList).not.toContain("invalid");
+		expect(document.getElementById('surname').style.backgroundColor).not.toBe("red");
+	});
 });
